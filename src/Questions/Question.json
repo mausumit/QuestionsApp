@@ -1,0 +1,36 @@
+[
+    {
+        "id": 987,
+        "type": "multiple",
+        "question": "Do you have dietary preferences?",
+        "options": [
+            "Avoid Gluten",
+            "Avoid Dairy",
+            "Avoid Wheat",
+            "Vegan",
+            "Vegetarian"
+        ]
+    },
+    {
+        "id": 987,
+        "type": "numeric_range",
+        "question": "Do you have dietary preferences?"
+    },
+    {
+        "id": 987,
+        "type": "date_range",
+        "question": "Do you have dietary preferences?"
+    },
+    {
+        "id": 987,
+        "type": "text",
+        "question": "Do you have dietary preferences?",
+        "options": [
+            "Avoid Gluten",
+            "Avoid Dairy",
+            "Avoid Wheat",
+            "Vegan",
+            "Vegetarian"
+        ]
+    }
+]
