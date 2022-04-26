@@ -2,5 +2,6 @@ export type QuestionType ={
     id: number;
     type: string;
     question: string;
-    options: Array<string>;
+    options?: Array<string>;
+    ans: string;
 }

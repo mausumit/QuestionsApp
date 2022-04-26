@@ -12,52 +12,86 @@ import {
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import Box from "@mui/material/Box";
-function Item(props: any) {
-    const [value, setValue] = React.useState<DateRange<Date>>([null, null]);
-    console.log(props.currentIndex);
+export type ItemProps = {
+  currentIndex: number;
+  item: any;
+  pushAnswer: (ans:unknown) => void;
+  answer: unknown[] 
+};
+const Item: React.FC<ItemProps> = ({
+  currentIndex,
+  item,
+  pushAnswer,
+  answer,
+}: ItemProps) => {
+  const [dateValue, setValue] = React.useState<DateRange<Date>>([null, null]);
+  const getMultipleChoiceVal = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const ans = [...answer];
+    ans[currentIndex] = event.currentTarget.value;
+    pushAnswer(event.currentTarget.value);
+  };
+
+  const getSliderVal = (
+    event: Event,
+    value: number | Array<number>,
+    activeThumb: number
+  ) => {
+    pushAnswer(value);
+  };
   return (
     <Paper className="ques-card">
       <FormControl>
         <FormLabel id="demo-radio-buttons-group-label">
-          {props.item.question}
+          {item.question}
         </FormLabel>
-        {props.item.type == "multiple" && (
+        {item.type == "multiple" && (
           <RadioGroup
             aria-labelledby="demo-radio-buttons-group-label"
-            defaultValue="female"
+            defaultValue={answer && answer[currentIndex]}
             name="radio-buttons-group"
+            onChange={getMultipleChoiceVal}
           >
-            {props.item.options &&
-              props.item.options.map((item: string) => (
-                <>
-                  <FormControlLabel
-                    value={item}
-                    control={<Radio />}
-                    label="Female"
-                  />
-                </>
+            {item.options &&
+              item.options.map((item: string) => (
+                <FormControlLabel
+                  value={item}
+                  control={<Radio />}
+                  label={item}
+                  key={item}
+                />
               ))}
           </RadioGroup>
         )}
-        {props.item.type == "text" && (
-          <TextField id="outlined-basic" label="Outlined" variant="outlined" />
-        )}
-
-        {props.item.type == "numeric_range" && (
-          <Slider
-            defaultValue={50}
-            aria-label="Default"
-            valueLabelDisplay="auto"
+        {item.type == "text" && (
+          <TextField
+            value={answer[currentIndex]}
+            onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+              pushAnswer(event.target.value);
+            }}
+            id="outlined-basic"
+            label="Outlined"
+            variant="outlined"
           />
         )}
-        {props.item.type == "date_range" && (
+
+        {item.type == "numeric_range" && (
+          <Slider
+            defaultValue={(answer[currentIndex] as number) || 50}
+            aria-label="Default"
+            valueLabelDisplay="auto"
+            value={answer[currentIndex] as number}
+            onChange={getSliderVal}
+          />
+        )}
+        {item.type == "date_range" && (
           <LocalizationProvider dateAdapter={AdapterDateFns}>
             <DateRangePicker
               startText="Check-in"
               endText="Check-out"
-              value={value}
+              value={dateValue}
               onChange={(newValue: any) => {
                 setValue(newValue);
+                pushAnswer(newValue);
               }}
               renderInput={(startProps: any, endProps: any) => (
                 <React.Fragment>
@@ -72,5 +106,5 @@ function Item(props: any) {
       </FormControl>
     </Paper>
   );
-}
+};
 export default Item;
